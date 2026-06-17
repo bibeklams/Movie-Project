@@ -69,14 +69,14 @@ export const login = async (req, res, next) => {
         // 👇 ADD COOKIES HERE (correct place)
         res.cookie("accessToken", accessToken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
           sameSite: "none", // 🔥 IMPORTANT CHANGE
           maxAge: 30 * 60 * 1000,
         });
 
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
           sameSite: "none", // 🔥 IMPORTANT CHANGE
           maxAge: 24 * 60 * 60 * 1000,
         });
@@ -148,13 +148,13 @@ export const refreshToken = async (req, res, next) => {
 export const logout = (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "none",
   });
 
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "none",
   });
   res.status(200).json({
