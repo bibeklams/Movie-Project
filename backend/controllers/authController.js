@@ -55,19 +55,40 @@ export const login = async (req, res, next) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 30 * 60 * 1000,
-    });
+    const login = async (req, res) => {
+      try {
+        const { email, password } = req.body;
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 1 * 24 * 60 * 60 * 1000,
-    });
+        // check user + verify password
+        const user = await User.findOne({ email });
+
+        // generate tokens
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+
+        // 👇 ADD COOKIES HERE (correct place)
+        res.cookie("accessToken", accessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "none", // 🔥 IMPORTANT CHANGE
+          maxAge: 30 * 60 * 1000,
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "none", // 🔥 IMPORTANT CHANGE
+          maxAge: 24 * 60 * 60 * 1000,
+        });
+
+        return res.json({
+          success: true,
+          message: "Login successful",
+        });
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+    };
 
     res.status(200).json({
       success: true,
@@ -128,13 +149,13 @@ export const logout = (req, res) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: "none",
   });
 
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    sameSite: "none",
   });
   res.status(200).json({
     success: true,
