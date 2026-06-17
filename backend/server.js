@@ -6,6 +6,7 @@ dotenv.config();
 const port = process.env.PORT || 3000;
 
 mongoDb();
+console.log("DEPLOY TEST 12345");
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);
