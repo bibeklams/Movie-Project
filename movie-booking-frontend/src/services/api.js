@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3001/api",
+  baseURL: "https://movie-project-zuez.onrender.com/api",
   withCredentials: true,
 });
 
