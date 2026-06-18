@@ -162,23 +162,7 @@ The dashboard displays:
 
 ---
 
-## 🚀 Installation
 
-### Clone Repository
-
-```bash
-git clone https://github.com/your-username/movie-project.git
-```
-
-### Frontend Setup
-
-```bash
-cd frontend
-
-npm install
-
-npm run dev
-```
 
 ### Backend Setup
 
